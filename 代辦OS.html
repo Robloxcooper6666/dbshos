@@ -7,52 +7,24 @@
 <meta name="color-scheme" content="light dark" />
 <style>
   :root{
-    --bg:#0b1020;
-    --panel:#0f1724;
-    --muted:#9aa4b2;
-    --text:#e6eef8;
-    --accent1:#7c5cff;
-    --accent2:#5e8bff;
-    --ok:#22c55e;
-    --warn:#f59e0b;
-    --danger:#ef4444;
-    --radius:14px;
-    --glass:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+    --bg:#0b1020; --panel:#0f1724; --muted:#9aa4b2; --text:#e6eef8;
+    --accent1:#7c5cff; --accent2:#5e8bff; --ok:#22c55e; --warn:#f59e0b;
+    --danger:#ef4444; --radius:14px;
   }
   @media (prefers-color-scheme: light){
-    :root{
-      --bg:#f4f7fb; --panel:#ffffff; --text:#071028; --muted:#6b7280;
-    }
+    :root{ --bg:#f4f7fb; --panel:#ffffff; --text:#071028; --muted:#6b7280; }
   }
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
     margin:0; font-family: "Noto Sans TC", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    background:
-      radial-gradient(800px 400px at 10% -10%, rgba(124,92,255,.12), transparent 30%),
-      radial-gradient(800px 400px at 110% 10%, rgba(94,139,255,.08), transparent 30%),
-      var(--bg);
-    color:var(--text); -webkit-font-smoothing:antialiased;
-    display:flex; flex-direction:column; min-height:100vh;
+    background: var(--bg); color:var(--text); display:flex; flex-direction:column; min-height:100vh;
   }
-
-  header{
-    position:sticky; top:0; z-index:50;
-    background:rgba(255,255,255,.02);
-    backdrop-filter: blur(8px) saturate(120%);
-    border-bottom:1px solid rgba(255,255,255,.03);
-  }
+  header{ position:sticky; top:0; background:rgba(255,255,255,.02); backdrop-filter: blur(8px) saturate(120%); border-bottom:1px solid rgba(255,255,255,.03); }
   .wrap{ max-width:980px; margin:0 auto; padding:18px 16px; }
-
   .title-row{ display:flex; gap:12px; align-items:center; }
-  .logo{
-    width:44px; height:44px; border-radius:10px;
-    background:linear-gradient(135deg,var(--accent1),var(--accent2));
-    box-shadow: 0 10px 30px rgba(0,0,0,.25);
-    display:grid; place-items:center; font-weight:700; color:white;
-  }
+  .logo{ width:44px; height:44px; border-radius:10px; background:linear-gradient(135deg,var(--accent1),var(--accent2)); display:grid; place-items:center; font-weight:700; color:white; }
   h1{ margin:0; font-size:18px; letter-spacing:.4px; }
-
   .toolbar{ margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
   .input, .select, .chip, button{
     border-radius:12px; padding:10px 12px; border:1px solid rgba(255,255,255,.06);
@@ -63,63 +35,56 @@
   .small{ padding:8px 10px; font-size:14px; }
   .btn-primary{ background:linear-gradient(135deg,var(--accent1),var(--accent2)); color:white; border:none; cursor:pointer; }
   .btn-ghost{ background:transparent; border:1px dashed rgba(255,255,255,.06); cursor:pointer; }
-
   main{ flex:1; padding:18px 0 120px; display:flex; gap:12px; }
-  .category-panel{
-    width:160px;
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    padding:0 16px;
-  }
-  .category{
-    padding:6px 10px;
-    border-radius:8px;
-    cursor:pointer;
-    background:rgba(124,92,255,.08);
-    text-align:center;
-  }
+  .category-panel{ width:160px; display:flex; flex-direction:column; gap:6px; padding:0 16px; }
+  .category{ padding:6px 10px; border-radius:8px; cursor:pointer; background:rgba(124,92,255,.08); text-align:center; }
   .category.active{ background:linear-gradient(135deg,var(--accent1),var(--accent2)); color:white; }
-
   .list-wrap{ flex:1; display:grid; gap:10px; }
-
-  .card{
-    display:grid; grid-template-columns:28px 1fr auto; gap:12px; align-items:start;
-    padding:14px; border-radius:var(--radius); background:var(--panel); border:1px solid rgba(255,255,255,.04);
-    transition:transform .12s ease, box-shadow .12s ease;
-  }
+  .card{ display:grid; grid-template-columns:28px 1fr auto; gap:12px; align-items:start; padding:14px; border-radius:var(--radius); background:var(--panel); border:1px solid rgba(255,255,255,.04); transition:transform .12s ease, box-shadow .12s ease; }
   .card:active{ transform:translateY(1px) }
   .dragging{ opacity:.6; transform:scale(.995); }
-
-  .check{
-    width:28px; height:28px; border-radius:8px; border:2px solid rgba(255,255,255,.14);
-    display:grid; place-items:center; cursor:pointer; user-select:none;
-  }
+  .check{ width:28px; height:28px; border-radius:8px; border:2px solid rgba(255,255,255,.14); display:grid; place-items:center; cursor:pointer; user-select:none; }
   .check.done{ background:linear-gradient(135deg,var(--ok), #16a34a); border:0; color:white; }
-
-  .title{
-    font-weight:600; font-size:15px; outline:none; padding:2px 6px; border-radius:8px;
-  }
+  .title{ font-weight:600; font-size:15px; outline:none; padding:2px 6px; border-radius:8px; }
   .title[contenteditable]:focus{ box-shadow:0 0 0 3px rgba(124,92,255,.15); }
-
   .meta{ display:flex; gap:8px; margin-top:8px; color:var(--muted); font-size:13px; flex-wrap:wrap; }
-
   .tag{ padding:6px 8px; border-radius:999px; background:rgba(124,92,255,.08); font-size:13px; }
   .tag.pri-1{ background:rgba(34,197,94,.08) }
   .tag.pri-2{ background:rgba(245,158,11,.08) }
   .tag.pri-3{ background:rgba(239,68,68,.08) }
-
   .actions{ display:flex; gap:8px; align-items:center; }
   .icon{ width:36px; height:36px; border-radius:10px; display:grid; place-items:center; border:1px solid rgba(255,255,255,.06); cursor:pointer; background:transparent; }
   .sub{ grid-column:2/4; color:var(--muted); margin-top:8px; font-size:13px; padding:8px; border-radius:10px; outline:none; }
   .sub[contenteditable]:focus{ background:rgba(124,92,255,.03); color:var(--text); box-shadow:0 0 0 3px rgba(124,92,255,.08) }
-
-  .empty{
-    padding:36px; text-align:center; color:var(--muted); border-radius:12px; border:1px dashed rgba(255,255,255,.03);
-  }
-
+  .empty{ padding:36px; text-align:center; color:var(--muted); border-radius:12px; border:1px dashed rgba(255,255,255,.03); }
   footer.fab{ position:fixed; left:0; right:0; bottom:12px; display:flex; justify-content:center; pointer-events:none; }
-  .fab-inner{ pointer-events:auto; display:flex; gap:10px; }
+
+  /* 跑馬燈文字 */
+  .marquee-container {
+    position: fixed;
+    bottom:12px;
+    left:0;
+    right:0;
+    overflow:hidden;
+    height:28px;
+    pointer-events:none;
+    z-index:9999;
+    background: rgba(0,0,0,0.2);
+    border-radius:14px 0 0 14px;
+  }
+  .marquee-text {
+    display:inline-block;
+    white-space: nowrap;
+    color: #ffffff;
+    font-weight:bold;
+    font-size:13px;
+    padding-left:100%;
+    animation: marquee 15s linear infinite;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+  }
 
   @media (max-width:640px){
     main{ flex-direction:column; }
@@ -135,10 +100,11 @@
       <div class="logo">麒</div>
       <div>
         <h1>待辦清單系統 <br> 隨時可編輯</h1>
-        <div style="color:var(--muted); font-size:13px; margin-top:6px">按 Enter 新增；點擊文字可直接編輯；拖曳可排序；資料會自動存在本機 代辦事項會自動保存到瀏覽器快取不用擔心會遺失</div>
+        <div style="color:var(--muted); font-size:13px; margin-top:6px">
+          按 Enter 新增；點擊文字可直接編輯；拖曳可排序；資料會自動存在本機 代辦事項會自動保存到瀏覽器快取不用擔心會遺失
+        </div>
       </div>
     </div>
-
     <div class="toolbar" style="margin-top:14px">
       <input id="quick" class="input" placeholder="快速新增：輸入內容後按 Enter" />
       <select id="prio" class="select">
@@ -159,7 +125,6 @@
     <div class="category active" data-id="all">全部</div>
     <button id="newCategory" class="chip">+ 新增類別</button>
   </div>
-
   <div class="list-wrap" id="list" aria-live="polite"></div>
 </main>
 
@@ -181,51 +146,35 @@
   </article>
 </template>
 
+<!-- 跑馬燈 -->
+<div class="marquee-container">
+  <div class="marquee-text">陳麒安製作 僅限台灣caton公司使用 未經允許禁止使用以及複製</div>
+</div>
+
 <script>
 (() => {
   const $ = sel => document.querySelector(sel);
-  const $$ = sel => Array.from(document.querySelectorAll(sel));
   const uid = () => Math.random().toString(36).slice(2,9)+Date.now().toString(36);
 
   const STORE = 'pretty-todo-v3';
   let state = { tasks: [], order: [], filter:'all', categories:['學習','工作','娛樂'], selectedCategory:'all' };
 
-  function load(){
-    try{
-      const raw = localStorage.getItem(STORE);
-      if(raw) state = JSON.parse(raw);
-    }catch(e){ console.error('load err', e) }
-  }
+  function load(){ try{ const raw = localStorage.getItem(STORE); if(raw) state = JSON.parse(raw); }catch(e){console.error(e)} }
   function save(){ try{ localStorage.setItem(STORE, JSON.stringify(state)); }catch(e){} }
-
   function addTask({title='', notes='', due='', priority=0, tags=[], category='學習', done=false}){
     const t = { id: uid(), title:title||'未命名', notes, due, priority:+priority||0, tags, done, category, createdAt:Date.now() };
-    state.tasks.push(t);
-    state.order.unshift(t.id);
-    save(); render();
-    return t;
+    state.tasks.push(t); state.order.unshift(t.id); save(); render(); return t;
   }
-
-  function removeTask(id){
-    state.tasks = state.tasks.filter(t=>t.id!==id);
-    state.order = state.order.filter(x=>x!==id);
-    save(); render();
-  }
-
+  function removeTask(id){ state.tasks = state.tasks.filter(t=>t.id!==id); state.order = state.order.filter(x=>x!==id); save(); render(); }
   function find(id){ return state.tasks.find(t=>t.id===id); }
-
-  function update(id, patch){ const t = find(id); if(!t) return; Object.assign(t, patch); save(); render(); }
-
-  function makeTagEl(text, cls='tag'){ const s = document.createElement('span'); s.className = cls; s.textContent = text; return s; }
+  function update(id, patch){ const t=find(id); if(!t) return; Object.assign(t, patch); save(); render(); }
+  function makeTagEl(text, cls='tag'){ const s=document.createElement('span'); s.className=cls; s.textContent=text; return s; }
 
   function render(){
-    const list = $('#list');
-    while(list.firstChild) list.removeChild(list.firstChild);
-
+    const list = $('#list'); while(list.firstChild) list.removeChild(list.firstChild);
     state.order.forEach(id=>{
       const t = find(id); if(!t) return;
       if(state.selectedCategory!=='all' && t.category!==state.selectedCategory) return;
-
       const frag = document.importNode($('#tpl').content, true);
       const art = frag.querySelector('.card');
       const chk = art.querySelector('.check');
@@ -233,124 +182,55 @@
       const meta = art.querySelector('.meta');
       const sub = art.querySelector('.sub');
 
-      art.dataset.id = t.id;
-      title.textContent = t.title;
-      sub.textContent = t.notes || '';
-      chk.classList.toggle('done', t.done);
-      chk.innerHTML = t.done ? '✓' : '';
+      art.dataset.id=t.id;
+      title.textContent=t.title;
+      sub.textContent=t.notes||'';
+      chk.classList.toggle('done', t.done); chk.innerHTML=t.done?'✓':'';
+      meta.innerHTML=''; meta.appendChild(makeTagEl('類別: '+t.category,'tag'));
 
-      meta.innerHTML = '';
-      meta.appendChild(makeTagEl('類別: '+t.category, 'tag'));
+      art.querySelector('[data-act="delete"]').addEventListener('click',()=>{ if(confirm('確定刪除？')) removeTask(t.id); });
+      art.querySelector('[data-act="set-due"]').addEventListener('click',()=>{ const val=prompt('設定到期日（YYYY-MM-DD，空白清除）', t.due||''); if(val!==null) update(t.id,{due:val||''}); });
+      art.querySelector('[data-act="tag"]').addEventListener('click',()=>{ const val=prompt('輸入標籤，逗號分隔', (t.tags||[]).join(',')); if(val!==null) update(t.id,{tags: val.split(',').map(s=>s.trim()).filter(Boolean)}); });
+      art.querySelector('[data-act="prio"]').addEventListener('click',()=>{ const val=prompt('優先度 0=無,1=低,2=中,3=高', String(t.priority||0)); if(val!==null) update(t.id,{priority:Math.max(0,Math.min(3,parseInt(val)||0))}); });
+      art.querySelector('[data-act="category"]').addEventListener('click',()=>{ const val=prompt('輸入類別名稱', t.category); if(val!==null){ if(!state.categories.includes(val)) state.categories.push(val); update(t.id,{category:val}); renderCategories(); } });
 
-      art.querySelector('[data-act="delete"]').addEventListener('click', e=>{
-        if(confirm('確定刪除？')) removeTask(t.id);
-      });
-      art.querySelector('[data-act="set-due"]').addEventListener('click', e=>{
-        const val = prompt('設定到期日（YYYY-MM-DD，空白清除）', t.due||'');
-        if(val === null) return;
-        update(t.id, { due: val||'' });
-      });
-      art.querySelector('[data-act="tag"]').addEventListener('click', e=>{
-        const val = prompt('輸入標籤，逗號分隔', (t.tags||[]).join(','));
-        if(val === null) return;
-        update(t.id, { tags: val.split(',').map(s=>s.trim()).filter(Boolean) });
-      });
-      art.querySelector('[data-act="prio"]').addEventListener('click', e=>{
-        const val = prompt('優先度 0=無,1=低,2=中,3=高', String(t.priority||0));
-        if(val === null) return;
-        update(t.id, { priority: Math.max(0,Math.min(3,parseInt(val)||0)) });
-      });
-      art.querySelector('[data-act="category"]').addEventListener('click', e=>{
-        const val = prompt('輸入類別名稱', t.category);
-        if(val === null) return;
-        if(!state.categories.includes(val)) state.categories.push(val);
-        update(t.id, { category: val });
-        renderCategories();
-      });
-
-      chk.addEventListener('click', e=>{ update(t.id, { done: !t.done }); });
-
-      title.addEventListener('blur', e=>{
-        const v = title.textContent.trim();
-        if(!v){ title.textContent = t.title; return; }
-        if(v!==t.title) update(t.id,{title:v});
-      });
-      title.addEventListener('keydown', e=>{
-        if(e.key==='Enter'){ e.preventDefault(); title.blur(); }
-      });
-      sub.addEventListener('blur', e=>{
-        const v = sub.textContent.trim();
-        if(v!==t.notes) update(t.id,{notes:v});
-      });
-      sub.addEventListener('keydown', e=>{
-        if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){ sub.blur(); }
-      });
+      chk.addEventListener('click',()=>{ update(t.id,{done:!t.done}); });
+      title.addEventListener('blur',()=>{ const v=title.textContent.trim(); if(!v){ title.textContent=t.title; return; } if(v!==t.title) update(t.id,{title:v}); });
+      title.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); title.blur(); } });
+      sub.addEventListener('blur',()=>{ const v=sub.textContent.trim(); if(v!==t.notes) update(t.id,{notes:v}); });
+      sub.addEventListener('keydown', e=>{ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) sub.blur(); });
 
       list.appendChild(frag);
     });
-
     if(!list.children.length) list.innerHTML='<div class="empty">目前沒有待辦。</div>';
   }
 
   function renderCategories(){
-    const panel = $('#categoryPanel');
-    panel.querySelectorAll('.category').forEach(c=>c.remove());
-    const allBtn = document.createElement('div');
-    allBtn.className='category'+(state.selectedCategory==='all'?' active':'');
-    allBtn.dataset.id='all'; allBtn.textContent='全部';
+    const panel = $('#categoryPanel'); panel.querySelectorAll('.category').forEach(c=>c.remove());
+    const allBtn=document.createElement('div'); allBtn.className='category'+(state.selectedCategory==='all'?' active':''); allBtn.dataset.id='all'; allBtn.textContent='全部';
     allBtn.addEventListener('click',()=>{ state.selectedCategory='all'; renderCategories(); render(); });
     panel.insertBefore(allBtn, $('#newCategory'));
-
-    state.categories.forEach(c=>{
-      const div = document.createElement('div');
-      div.className='category'+(state.selectedCategory===c?' active':'');
-      div.dataset.id=c; div.textContent=c;
-      div.addEventListener('click',()=>{ state.selectedCategory=c; renderCategories(); render(); });
-      panel.insertBefore(div, $('#newCategory'));
-    });
+    state.categories.forEach(c=>{ const div=document.createElement('div'); div.className='category'+(state.selectedCategory===c?' active':''); div.dataset.id=c; div.textContent=c; div.addEventListener('click',()=>{ state.selectedCategory=c; renderCategories(); render(); }); panel.insertBefore(div,$('#newCategory')); });
   }
 
   function initUI(){
     load(); renderCategories(); render();
-
-    $('#add').addEventListener('click', ()=>{
-      const t = $('#quick').value.trim();
-      if(!t) return;
-      addTask({
-        title: t,
-        priority: parseInt($('#prio').value)||0,
-        tags: ($('#tags').value||'').split(',').map(s=>s.trim()).filter(Boolean),
-        due: $('#due').value || '',
-        category: state.selectedCategory==='all'?'學習':state.selectedCategory
-      });
-      $('#quick').value=''; $('#tags').value=''; $('#due').value=''; $('#prio').value='0';
-    });
+    $('#add').addEventListener('click',()=>{ const t=$('#quick').value.trim(); if(!t) return; addTask({
+      title:t, priority:parseInt($('#prio').value)||0,
+      tags: ($('#tags').value||'').split(',').map(s=>s.trim()).filter(Boolean),
+      due: $('#due').value||'',
+      category: state.selectedCategory==='all'?'學習':state.selectedCategory
+    }); $('#quick').value=''; $('#tags').value=''; $('#due').value=''; $('#prio').value='0'; });
 
     $('#quick').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); $('#add').click(); } });
-    $('#newCategory').addEventListener('click', ()=>{
-      const val = prompt('輸入新類別名稱');
-      if(!val) return;
-      if(!state.categories.includes(val)) state.categories.push(val);
-      renderCategories(); save();
-    });
-
-    // 禁止右鍵
-    document.addEventListener('contextmenu', e => { e.preventDefault(); alert('右鍵已被禁止使用！'); });
-
-    // 禁止 F12 / Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+U
-    document.addEventListener('keydown', e => {
-      if(
-        e.key==='F12' ||
-        (e.ctrlKey && e.shiftKey && (e.key==='I' || e.key==='J')) ||
-        (e.ctrlKey && e.key==='U')
-      ){
-        e.preventDefault();
-        alert('開發者工具已被禁用！');
-      }
-    });
+    $('#newCategory').addEventListener('click',()=>{ const val=prompt('輸入新類別名稱'); if(!val) return; if(!state.categories.includes(val)) state.categories.push(val); renderCategories(); save(); });
   }
 
   initUI();
+
+  // 禁止右鍵與F12
+  document.addEventListener('contextmenu', e=>e.preventDefault());
+  document.addEventListener('keydown', e=>{ if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')) e.preventDefault(); });
 })();
 </script>
 </body>
