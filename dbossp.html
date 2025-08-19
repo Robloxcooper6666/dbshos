@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>待辦清單使用說明</title>
+<style>
+  body{
+    margin:0; font-family: "Noto Sans TC", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    background:#0b1020; color:#e6eef8;
+    display:flex; justify-content:center; align-items:center; min-height:100vh;
+  }
+  .container{
+    max-width:700px; width:90%; background:#0f1724; padding:24px 32px;
+    border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,0.5);
+  }
+  .logo{
+    display:block; margin:0 auto 16px auto;
+    width:80px; height:80px; border-radius:16px;
+  }
+  h1{ font-size:28px; margin-bottom:16px; text-align:center; color:#7c5cff; }
+  h2{ font-size:20px; margin-top:24px; margin-bottom:8px; color:#5e8bff; }
+  p{ font-size:16px; line-height:1.6; margin-bottom:8px; }
+  ul{ margin-left:20px; margin-bottom:16px; }
+  li{ margin-bottom:6px; }
+  .note{ background:rgba(124,92,255,0.1); padding:8px 12px; border-left:4px solid #7c5cff; margin-bottom:16px; border-radius:8px; color:#e6eef8; }
+  a{ color:#7c5cff; text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+  .footer{ text-align:center; margin-top:24px; font-size:14px; color:#9aa4b2; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <img class="logo" src="https://github.com/Robloxcooper6666/dbshos/blob/main/%E9%99%B3.png?raw=true" alt="Logo">
+
+    <h1>待辦清單使用說明</h1>
+
+    <div class="note">
+      <strong>提示：</strong>所有資料會自動保存在瀏覽器快取，不用擔心遺失。
+    </div>
+
+    <h2>快速新增待辦</h2>
+    <p>在「快速新增」輸入框中輸入待辦事項，按 <strong>Enter</strong> 或點擊 <strong>新增</strong> 按鈕即可。</p>
+
+    <h2>編輯待辦</h2>
+    <ul>
+      <li>點擊待辦標題即可編輯文字。</li>
+      <li>備註可在下方文字區域編輯，編輯完成按 Ctrl+Enter 或離開焦點即可保存。</li>
+      <li>點擊完成框可標記任務完成或未完成。</li>
+    </ul>
+
+    <h2>設定細節</h2>
+    <ul>
+      <li>📅 設定到期日</li>
+      <li>🏷️ 編輯標籤</li>
+      <li>⚑ 設定優先度（低、中、高）</li>
+      <li>📂 設定類別</li>
+      <li>🗑️ 刪除待辦</li>
+    </ul>
+
+    <h2>分類與排序</h2>
+    <p>左側可切換類別，拖曳待辦可排序，支援「全部」、「自訂類別」等。</p>
+
+    <h2>新增類別</h2>
+    <p>點擊左側「+ 新增類別」按鈕，輸入類別名稱即可新增。</p>
+
+    <h2>更多資訊</h2>
+    <p>專案已開源於 <a href="https://github.com" target="_blank">GitHub</a>，可自行修改與使用。</p>
+
+    <div class="footer">
+      製作：陳麒安 | 使用 ChatGPT 開發
+    </div>
+  </div>
+</body>
+</html>
