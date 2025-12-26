@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>待辦清單 · 全功能版</title>
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Robloxcooper6666/dbshos/refs/heads/main/%E9%99%B3.png">
+  <meta name="color-scheme" content="light dark" />
+
+  <!-- CSS 樣式 -->
+  <style>
+    /* -------------------- 主題變數設定 -------------------- */
+    :root {
+      --bg: #f4f7fb;          /* 主背景色 */
+      --panel: #ffffff;       /* 面板背景 */
+      --text: #071028;        /* 文字顏色 */
+      --muted: #6b7280;       /* 輔助文字顏色 */
+      --accent1: #7c5cff;     /* 主色調1 */
+      --accent2: #5e8bff;     /* 主色調2 */
+      --ok: #22c55e;          /* 完成狀態顏色 */
+      --warn: #f59e0b;        /* 警告顏色 */
+      --danger: #ef4444;      /* 危險顏色 */
+      --radius: 14px;         /* 圓角 */
+      --border: rgba(0,0,0,.06); /* 邊框 */
+      --chip: #eef1f6;        /* 標籤背景 */
+      --chip-text: #333;      /* 標籤文字 */
+    }
+
+    /* -------------------- 不同主題 -------------------- */
+    body.theme-muji { /* 無印風 */
+      --bg: #f6f5f3;
+      --panel: #fff;
+      --text: #3a3a3a;
+      --muted: #777;
+      --accent1: #8d6e63;
+      --accent2: #8d6e63;
+      --border: #e4e1dd;
+      --chip: #f3f2ee;
+      --chip-text: #4a4a4a;
+      font-family: "Noto Sans TC", system-ui, -apple-system, "Yu Gothic UI", Arial;
+    }
+
+    body.theme-dark { /* 深色 */
+      --bg: #0b1020;
+      --panel: #0f1724;
+      --text: #e6eef8;
+      --muted: #9aa4b2;
+      --accent1: #7c5cff;
+      --accent2: #5e8bff;
+      --border: rgba(255,255,255,.06);
+      --chip: rgba(124,92,255,.08);
+      --chip-text: #cfd6ff;
+    }
+
+    body.theme-light { /* 淺色 */
+      --bg: #fff;
+      --panel: #f7f7f9;
+      --text: #111;
+      --muted: #666;
+      --accent1: #007aff;
+      --accent2: #4aa3ff;
+      --border: #e6e6ee;
+      --chip: #eef3ff;
+      --chip-text: #102030;
+    }
+
+    body.theme-cyber { /* 賽博 */
+      --bg: #050510;
+      --panel: #0f0f1e;
+      --text: #eaffea;
+      --muted: #8fbf8f;
+      --accent1: #ff00a8;
+      --accent2: #00eaff;
+      --border: #242446;
+      --chip: #101a2a;
+      --chip-text: #6ff5ff;
+      font-family: Consolas, "Noto Sans TC", monospace;
+      text-shadow: 0 0 0.2px rgba(111,245,255,.3);
+    }
+
+    body.theme-xp { /* 簡約藍 */
+      --bg: #d6e9f8;
+      --panel: #f0f8ff;
+      --text: #000080;
+      --muted: #335577;
+      --accent1: #2a7fff;
+      --accent2: #2a7fff;
+      --border: #9cc3eb;
+      --chip: #e3f0ff;
+      --chip-text: #003366;
+      font-family: Tahoma, "Microsoft Sans Serif", "Noto Sans TC", sans-serif;
+    }
+
+    /* -------------------- 全域樣式 -------------------- */
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      transition: background .25s ease, color .25s ease;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,.02);
+      backdrop-filter: blur(8px) saturate(120%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .wrap { max-width: 980px; margin: 0 auto; padding: 18px 16px; }
+
+    .title-row { display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+
+    .brand { display: flex; gap: 12px; align-items: center; }
+
+    .logo { width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, var(--accent1), var(--accent2)); display: grid; place-items: center; font-weight: 700; color: white; }
+
+    h1 { margin: 0; font-size: 18px; letter-spacing: .4px; }
+    .subtitle { color: var(--muted); font-size: 13px; margin-top: 6px; }
+
+    .theme-ctrl { display: flex; gap: 8px; align-items: center; background: var(--panel); border: 1px solid var(--border); padding: 8px 10px; border-radius: 10px; }
+    .select, .input, .chip, button { border-radius: 12px; padding: 10px 12px; border: 1px solid var(--border); background: var(--panel); color: var(--text); outline: none; box-shadow: 0 8px 20px rgba(2,6,23,.08); }
+    .select { width: 160px; }
+    .btn-primary { background: linear-gradient(135deg, var(--accent1), var(--accent2)); color: white; border: none; cursor: pointer; }
+    .small { padding: 8px 10px; font-size: 14px; }
+
+    .toolbar { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .input { min-width: 200px; flex: 1 1 320px; }
+
+    main { flex: 1; padding: 18px 0 120px; display: flex; gap: 12px; }
+
+    .category-panel { width: 180px; display: flex; flex-direction: column; gap: 6px; padding: 0 16px; }
+    .category { padding: 8px 10px; border-radius: 10px; cursor: pointer; background: var(--chip); color: var(--chip-text); text-align: center; border: 1px dashed var(--border); }
+    .category.active { background: linear-gradient(135deg, var(--accent1), var(--accent2)); color: white; border: none; }
+
+    .list-wrap { flex: 1; display: grid; gap: 10px; padding-right: 12px; }
+
+    /* 卡片 */
+    .card { display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; align-items: start; padding: 14px; border-radius: var(--radius); background: var(--panel); border: 1px solid var(--border); transition: transform .12s ease, box-shadow .12s ease; }
+    .card:active { transform: translateY(1px); }
+
+    .check { width: 28px; height: 28px; border-radius: 8px; border: 2px solid var(--border); display: grid; place-items: center; cursor: pointer; user-select: none; }
+    .check.done { background: linear-gradient(135deg, var(--ok), #16a34a); border: 0; color: white; }
+
+    .title { font-weight: 600; font-size: 15px; outline: none; padding: 2px 6px; border-radius: 8px; }
+    .title[contenteditable]:focus { box-shadow: 0 0 0 3px rgba(124,92,255,.15); }
+
+    .meta { display: flex; gap: 8px; margin-top: 8px; color: var(--muted); font-size: 13px; flex-wrap: wrap; }
+    .tag { padding: 6px 8px; border-radius: 999px; background: var(--chip); color: var(--chip-text); font-size: 13px; }
+    .tag.pri-1 { background: rgba(34,197,94,.12); color: #0b6a2c; }
+    .tag.pri-2 { background: rgba(245,158,11,.14); color: #8a5a04; }
+    .tag.pri-3 { background: rgba(239,68,68,.16); color: #8a1010; }
+
+    .actions { display: flex; gap: 8px; align-items: center; }
+    .icon { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; border: 1px solid var(--border); cursor: pointer; background: transparent; }
+
+    .sub { grid-column: 2/4; color: var(--muted); margin-top: 8px; font-size: 13px; padding: 8px; border-radius: 10px; outline: none; }
+    .sub[contenteditable]:focus { background: rgba(124,92,255,.06); color: var(--text); box-shadow: 0 0 0 3px rgba(124,92,255,.08); }
+
+    .empty { padding: 36px; text-align: center; color: var(--muted); border-radius: 12px; border: 1px dashed var(--border); }
+
+    /* 跑馬燈 */
+    .marquee-container { position: fixed; bottom: 12px; left: 12px; right: 12px; overflow: hidden; height: 28px; pointer-events: none; z-index: 9999; background: rgba(0,0,0,0.2); border-radius: 14px; }
+    .marquee-text { display: inline-block; white-space: nowrap; color: #fff; font-weight: bold; font-size: 13px; padding-left: 100%; animation: marquee 15s linear infinite; padding: 4px 0; }
+    @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-100%); } }
+
+    /* 设备信息显示 */
+    .device-info { position: fixed; bottom: 60px; left: 12px; padding: 6px 12px; background: rgba(0,0,0,0.7); color: white; border-radius: 8px; font-size: 12px; z-index: 10000; }
+
+    /* 浮動連結 */
+    .floating-links { position: fixed; right: 12px; bottom: 48px; display: flex; flex-direction: column; gap: 6px; z-index: 10000; }
+    .floating-links a { display: inline-block; padding: 8px 12px; text-decoration: none; font-size: 14px; font-weight: 600; color: #fff; border-radius: 8px; background: #555; transition: background 0.2s; }
+    .floating-links a:hover { background: #333; }
+  </style>
+</head>
+<body>
+  <!-- 首次彈窗 -->
+  <div id="popup-overlay" aria-hidden="true">
+    <div id="popup-box" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+      <p id="popup-title"><b>✨ 歡迎使用多主題待辦清單</b></p>
+      <p>本次更新內容<br><br>將其他bug修復將為設定的按鈕設定功能</p>
+      <button id="popup-close">確定</button>
+    </div>
+  </div>
+
+  <!-- 頁首 -->
+  <header>
+    <div class="wrap">
+      <div class="title-row">
+        <div class="brand">
+          <img class="logo" src="https://github.com/Robloxcooper6666/dbshos/blob/main/%E9%99%B3.png?raw=true" alt="Logo">
+          <div>
+            <h1>待辦清單系統 · 全功能版</h1>
+            <div class="subtitle">按 Enter 新增；點擊文字可直接編輯；拖曳可排序；資料自動保存在本機</div>
+          </div>
+        </div>
+
+        <!-- 主題切換 -->
+        <div class="theme-ctrl">
+          <span style="font-size:13px;color:var(--muted)">其他主題</span>
+          <select id="themeSwitcher" class="select small" title="切換主題">
+            <option value="muji">無印風</option>
+            <option value="dark">深色</option>
+            <option value="light">淺色</option>
+            <option value="cyber">賽博</option>
+            <option value="xp">簡約藍</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 新增任務工具列 -->
+      <div class="toolbar" style="margin-top:14px">
+        <input id="quick" class="input" placeholder="快速新增：輸入內容後按 Enter" />
+        <select id="prio" class="select">
+          <option value="0">優先度</option>
+          <option value="1">低</option>
+          <option value="2">中</option>
+          <option value="3">高</option>
+        </select>
+        <input id="due" type="date" class="input small" style="width:150px" />
+        <input id="tags" class="input small" placeholder="標籤（逗號分隔）" style="width:180px" />
+        <button id="add" class="btn-primary small">新增</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主內容 -->
+  <main class="wrap" style="display:flex; gap:12px;">
+    <div class="category-panel" id="categoryPanel">
+      <div class="category active" data-id="all">全部</div>
+      <button id="newCategory" class="chip" style="background:var(--chip); color:var(--chip-text); border:1px dashed var(--border)">+ 新增類別</button>
+    </div>
+    <div class="list-wrap" id="list" aria-live="polite"></div>
+  </main>
+
+  <!-- 设备信息显示 -->
+  <div class="device-info" id="deviceInfo"></div>
+
+  <!-- 模板 -->
+  <template id="tpl">
+    <article class="card" draggable="true">
+      <button class="check" title="切換完成"></button>
+      <div>
+        <div class="title" contenteditable="true"></div>
+        <div class="meta"></div>
+      </div>
+      <div class="actions">
+        <div class="icon" data-act="set-due" title="設定到期日">📅</div>
+        <div class="icon" data-act="tag" title="編輯標籤">🏷️</div>
+        <div class="icon" data-act="prio" title="設定優先度">⚑</div>
+        <div class="icon" data-act="category" title="設定類別">📂</div>
+        <div class="icon" data-act="delete" title="刪除">🗑️</div>
+      </div>
+      <div class="sub" contenteditable="true" placeholder="備註（可編輯）"></div>
+    </article>
+  </template>
+
+  <!-- 跑馬燈 -->
+  <div class="marquee-container">
+    <div class="marquee-text">陳麒安 ChatGPT 製作 · 本項目已在 GitHub 開源 · 可自行更改使用</div>
+  </div>
+
+  <!-- 浮動連結 -->
+  <div class="floating-links">
+    <a href="https://robloxcooper6666.github.io/dbshos/dbossp.html" target="_blank">使用說明</a>
+    <a href="https://github.com/Robloxcooper6666/dbshos" target="_blank">GitHub</a>
+  </div>
+
+  <!-- JS -->
+  <script>
+    (() => {
+      const $ = s => document.querySelector(s), $$ = s => document.querySelectorAll(s);
+      const uid = () => Math.random().toString(36).slice(2,9) + Date.now().toString(36);
+
+      /* -------------------- 設備偵測 -------------------- */
+      function detectDevice() {
+        const width = window.innerWidth;
+        let deviceType = '';
+        if (width >= 1025) deviceType = '電腦🖥️';
+        else if (width >= 769 && width <= 1024) deviceType = '平板';
+        else deviceType = '手機📱';
+        $('#deviceInfo').textContent = `目前裝置: ${deviceType} (${width}px)`;
+        return deviceType;
+      }
+      detectDevice();
+      window.addEventListener('resize', detectDevice);
+
+      /* -------------------- 主題切換 -------------------- */
+      const THEME_KEY = 'todo-theme';
+      const themeSwitcher = $('#themeSwitcher');
+      function applyTheme(t) {
+        document.body.className = 'theme-' + t;
+        localStorage.setItem(THEME_KEY, t);
+        themeSwitcher.value = t;
+      }
+      applyTheme(localStorage.getItem(THEME_KEY) || 'muji');
+      themeSwitcher.addEventListener('change', () => applyTheme(themeSwitcher.value));
+
+      /* -------------------- 資料層 -------------------- */
+      const STORE = 'pretty-todo-full';
+      let state = { tasks: [], order: [], filter: 'all', categories: ['學習','工作','娛樂'], selectedCategory: 'all' };
+      function load() { try { const r = localStorage.getItem(STORE); if (r) state = JSON.parse(r); } catch(e){console.error(e);} }
+      function save() { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch(e){} }
+
+      /* -------------------- 新增任務 -------------------- */
+      function addTask({ title = '', notes = '', due = '', priority = 0, tags = [], category = '學習', done = false }) {
+        const t = { id: uid(), title, notes, due, priority, tags, category, done };
+        state.tasks.push(t); save(); render(); return t;
+      }
+
+      /* -------------------- 渲染列表 -------------------- */
+      function render() {
+        const list = $('#list'); list.innerHTML = '';
+        const filtered = state.tasks.filter(t => state.selectedCategory === 'all' || t.category === state.selectedCategory);
+
+        if (!filtered.length) { list.innerHTML = '<div class="empty">目前沒有待辦事項</div>'; return; }
+
+        filtered.forEach(t => {
+          const node = document.importNode($('#tpl').content, true);
+          const card = node.querySelector('.card');
+          card.dataset.id = t.id;
+          const titleEl = card.querySelector('.title');
+          const subEl = card.querySelector('.sub');
+          const checkEl = card.querySelector('.check');
+          const meta = card.querySelector('.meta');
+
+          titleEl.textContent = t.title;
+          subEl.textContent = t.notes;
+          checkEl.classList.toggle('done', t.done);
+          meta.innerHTML = '';
+          if (t.due) meta.innerHTML += `<span class="tag">到期：${t.due}</span>`;
+          if (t.priority) meta.innerHTML += `<span class="tag pri-${t.priority}">優先${t.priority}</span>`;
+          if (t.tags?.length) meta.innerHTML += t.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+
+          /* 完成切換 */
+          checkEl.addEventListener('click', () => { t.done = !t.done; save(); render(); });
+
+          /* 編輯標題與備註 */
+          titleEl.addEventListener('input', () => { t.title = titleEl.textContent; save(); });
+          subEl.addEventListener('input', () => { t.notes = subEl.textContent; save(); });
+
+          /* 刪除 */
+          card.querySelector('[data-act="delete"]').addEventListener('click', () => {
+            state.tasks = state.tasks.filter(x => x.id !== t.id); save(); render();
+          });
+
+          /* 設定到期日 */
+          card.querySelector('[data-act="set-due"]').addEventListener('click', () => {
+            const d = prompt('設定到期日(YYYY-MM-DD)', t.due || '');
+            if (d) { t.due = d; save(); render(); }
+          });
+
+          /* 編輯標籤 */
+          card.querySelector('[data-act="tag"]').addEventListener('click', () => {
+            const tg = prompt('編輯標籤(逗號分隔)', t.tags.join(','));
+            if (tg !== null) { t.tags = tg.split(',').map(v=>v.trim()).filter(Boolean); save(); render(); }
+          });
+
+          /* 設定優先度 */
+          card.querySelector('[data-act="prio"]').addEventListener('click', () => {
+            const p = prompt('設定優先度(1低/2中/3高)', t.priority);
+            const np = Number(p); if ([1,2,3].includes(np)) { t.priority = np; save(); render(); }
+          });
+
+          /* 設定類別 */
+          card.querySelector('[data-act="category"]').addEventListener('click', () => {
+            const c = prompt('設定類別', t.category);
+            if (c) { t.category = c; if(!state.categories.includes(c)) state.categories.push(c); save(); renderCategories(); render(); }
+          });
+
+          /* 拖曳排序 */
+          card.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', t.id); card.classList.add('dragging'); });
+          card.addEventListener('dragend', e => { card.classList.remove('dragging'); save(); render(); });
+
+          list.appendChild(node);
+        });
+
+        /* 更新類別選中 */
+        $$('#categoryPanel .category').forEach(c => c.classList.toggle('active', c.dataset.id === state.selectedCategory));
+      }
+
+      /* -------------------- 類別管理 -------------------- */
+      function renderCategories() {
+        const panel = $('#categoryPanel');
+        panel.querySelectorAll('.category:not(.active)').forEach(n => n.remove());
+        state.categories.forEach(c => {
+          const div = document.createElement('div');
+          div.className = 'category';
+          div.dataset.id = c;
+          div.textContent = c;
+          panel.insertBefore(div, $('#newCategory'));
+        });
+      }
+
+      $('#categoryPanel').addEventListener('click', e => {
+        if (e.target.classList.contains('category')) {
+          state.selectedCategory = e.target.dataset.id; render();
+        } else if (e.target.id === 'newCategory') {
+          const name = prompt('新增類別名稱');
+          if (name) { state.categories.push(name); save(); renderCategories(); render(); }
+        }
+      });
+
+      /* -------------------- 初始化 -------------------- */
+      renderCategories(); load(); render();
+
+      /* -------------------- 新增任務按鈕 -------------------- */
+      $('#add').addEventListener('click', () => {
+        const title = $('#quick').value.trim();
+        const priority = Number($('#prio').value);
+        const due = $('#due').value;
+        const tags = $('#tags').value.split(',').map(t => t.trim()).filter(Boolean);
+        if (title) addTask({ title, priority, due, tags, category: state.selectedCategory==='all'?'學習':state.selectedCategory });
+        $('#quick').value=''; $('#prio').value='0'; $('#due').value=''; $('#tags').value='';
+      });
+
+      $('#quick').addEventListener('keydown', e => { if(e.key==='Enter'){ $('#add').click(); e.preventDefault(); } });
+
+      /* -------------------- 拖曳排序 -------------------- */
+      const listEl = $('#list');
+      listEl.addEventListener('dragover', e => {
+        e.preventDefault();
+        const dragging = $('.dragging');
+        const after = getDragAfterElement(listEl, e.clientY);
+        if (after == null) listEl.appendChild(dragging);
+        else listEl.insertBefore(dragging, after);
+      });
+      listEl.addEventListener('drop', () => {
+        state.tasks = Array.from(listEl.querySelectorAll('.card')).map(c=>state.tasks.find(t=>t.id===c.dataset.id));
+        save(); render();
+      });
+
+      function getDragAfterElement(container, y) {
+        const draggableEls = [...container.querySelectorAll('.card:not(.dragging)')];
+        return draggableEls.reduce((closest, child)=>{
+          const box = child.getBoundingClientRect();
+          const offset = y-(box.top+box.height/2);
+          if(offset<0 && offset>closest.offset) return {offset:offset, element:child};
+          else return closest;
+        }, {offset:Number.NEGATIVE_INFINITY}).element;
+      }
+
+      /* -------------------- 關閉彈窗 -------------------- */
+      $('#popup-close').addEventListener('click', ()=>$('#popup-overlay').style.display='none');
+    })();
+  </script>
+</body>
+</html>
